@@ -3,6 +3,7 @@ package com.parsers.xml;
 import com.Person;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -16,19 +17,15 @@ import java.util.List;
 
 public class DOMParser {
 
+    private static final Integer PERSON_LIST_INDEX = 0;
+
     public List<Person> parse(String path) {
         List<Person> personList = new ArrayList<>();
-        Document document;
-        try {
-            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            document = documentBuilder.parse(path);
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            throw new RuntimeException("Parse Exception", e);
-        }
+        Document document = buildDocument(path);
 
         Node catalogNode = document.getDocumentElement();
         NodeList notebookNodeList = catalogNode.getChildNodes();
-        NodeList personNodeList = notebookNodeList.item(0).getChildNodes();
+        NodeList personNodeList = notebookNodeList.item(PERSON_LIST_INDEX).getChildNodes();
         for (int i = 0; i < personNodeList.getLength(); i++) {
             Node personNode = personNodeList.item(i);
             personList.add(getPerson(personNode));
@@ -36,15 +33,32 @@ public class DOMParser {
         return personList;
     }
 
+    private Document buildDocument(String path) {
+        try {
+            DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            return documentBuilder.parse(path);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            throw new RuntimeException("Parse Exception", e);
+        }
+    }
+
     private Person getPerson(Node personNode) {
         Person person = new Person();
         if (personNode.getNodeType() == Node.ELEMENT_NODE) {
             Element personElement = (Element) personNode;
+            person.setId(Integer.parseInt(getAttributeValue("id", personElement)));
             person.setName(getTagValue("name", personElement));
             person.setAddress(getTagValue("address", personElement));
             person.setCash(Integer.parseInt(getTagValue("cash", personElement)));
+            person.setEducation(getTagValue("education", personElement));
         }
         return person;
+    }
+
+    private String getAttributeValue(String attributeName, Element element) {
+        NamedNodeMap attributes = element.getAttributes();
+        Node namedItem = attributes.getNamedItem(attributeName);
+        return namedItem.getNodeValue();
     }
 
     private String getTagValue(String tagName, Element element) {
