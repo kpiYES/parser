@@ -10,12 +10,12 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DOMParserTest {
+public class SAXParserTest {
 
     private static final String RESOURCE_PATH = "C:\\Users\\Mykhailo_Popov\\Desktop\\test.xml";
 
     // insert service to test
-    private DOMParser domParser = new DOMParser();
+    private SAXParser saxParser = new SAXParser();
 
     private List<Person> personList = new ArrayList<>(Arrays.asList(
             new Person(null, "Bob", "Kiev", 10000, null),
@@ -27,7 +27,7 @@ public class DOMParserTest {
         // given
 
         // when
-        List<Person> resultList = domParser.parse(RESOURCE_PATH);
+        List<Person> resultList = saxParser.parse(RESOURCE_PATH);
 
         // then
         assertThat(resultList.isEmpty(), is(false));

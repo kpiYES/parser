@@ -10,7 +10,8 @@ public class Person {
     private Integer cash;
     private String education;
 
-public Person(){}
+    public Person() {
+    }
 
     public Person(Integer id, String name, String address, Integer cash, String education) {
         this.id = id;

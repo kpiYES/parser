@@ -29,24 +29,24 @@ public class Main {
                 new Person(2, "Inna", "New York", 2220000, "school"),
                 new Person(3, "Izolda", "Odessa", 1100, "university")));
 
-        xmlTools.createXMLDocument(personList, xmlPath);
+        xmlTools.writeToFile(personList, xmlPath);
 
-//        SAXParsing
-        List<Person> saxParseList = saxParser.parse(xmlPath);
-
-//        DOMParsing
-        List<Person> domParseList = domParser.parse(xmlPath);
-
-
-        List<Person> newPersonList = new ArrayList<>();
-        for (Person person : saxParseList) {
-            if (person.getCash() >= 10000) {
-                newPersonList.add(person);
-            }
-        }
-
-        xmlTools.createXMLDocument(newPersonList, newXMLPath);
-
+////        SAXParsing
+//        List<Person> saxParseList = saxParser.parse(xmlPath);
+//
+////        DOMParsing
+//        List<Person> domParseList = domParser.parse(xmlPath);
+//
+//
+//        List<Person> newPersonList = new ArrayList<>();
+//        for (Person person : saxParseList) {
+//            if (person.getCash() >= 10000) {
+//                newPersonList.add(person);
+//            }
+//        }
+//
+//        xmlTools.writeToFile(newPersonList, newXMLPath);
+//
         jsonTools.writeToFile(newJSONPath, jacksonParser.parse(JSONUrl));
 
     }

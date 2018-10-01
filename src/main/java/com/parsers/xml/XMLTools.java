@@ -18,17 +18,24 @@ import java.util.List;
 
 public class XMLTools {
 
-    public void createXMLDocument(List<Person> personList, String path) {
+    public void writeToFile(List<Person> personList, String path) {
+        Document document = createDocument();
+        Document filledDocument = fillDocument(document, personList);
+        createFile(filledDocument, path);
+    }
 
+    private Document createDocument() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
+        DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Create new DocumentBuilder Exception", e);
         }
-        Document document = builder.newDocument();
+        return builder.newDocument();
+    }
 
+    private Document fillDocument(Document document, List<Person> personList) {
         Element catalog = document.createElement("catalog");
         document.appendChild(catalog);
 
@@ -58,15 +65,18 @@ public class XMLTools {
 
             notebook.appendChild(personNode);
         }
+        return document;
+    }
 
+    private void createFile(Document document, String pathToFile) {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         try {
-           Transformer transformer = transformerFactory.newTransformer();
+            Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File(path));
+            StreamResult result = new StreamResult(new File(pathToFile));
             transformer.transform(source, result);
-        } catch ( TransformerException e) {
-            throw new RuntimeException( "Transform Exception", e);
+        } catch (TransformerException e) {
+            throw new RuntimeException("Transform Exception", e);
         }
 
 

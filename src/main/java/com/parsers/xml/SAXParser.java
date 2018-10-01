@@ -29,7 +29,7 @@ public class SAXParser {
                 }
 
                 @Override
-                public void characters(char ch[], int start, int length) throws SAXException {
+                public void characters(char ch[], int start, int length) {
                     if (currentTag.equals("name")) {
                         currentPerson = new Person();
                         currentPerson.setName(new String(ch, start, length));
@@ -41,13 +41,12 @@ public class SAXParser {
 
                     if (currentTag.equals("cash")) {
                         currentPerson.setCash(Integer.parseInt(new String(ch, start, length)));
-                        currentPerson = null;
                     }
                 }
 
                 @Override
-                public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
-                    if (currentPerson != null) {
+                public void endElement(String namespaceURI, String localName, String qName) {
+                    if (currentTag.equals("cash")) {
                         personList.add(currentPerson);
                     }
                     currentTag = "";
